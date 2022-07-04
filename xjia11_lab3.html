@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/lab3.css">
+    <title>xjiaLab3</title>
+</head>
+<body>
+<header class="header">
+    <p class="header_lab">ITMD-565 Lab3 - xjia11@hawk.iit.edu</p>
+    <h1 class="header_title">Sales Tax Calculator</h1>
+</header>
+<article class="article">
+    <section class="article_description">
+        <p class="article_description_content">Enter Subtotal and Tax Rate and click the Calculate button to show the
+            sales tax amount and the total. Click the clear button to clear out all form fields.Tax rate should be a percentage
+            but do not enter a % sign in the tax rate box.</p>
+    </section>
+    <section class="article_form">
+        <div class="lable">
+            <p><label class="article_form_lable" for="subTotal">Subtotal:</label></p>
+            <p><label class="article_form_lable" for="taxRate">Tax Rate:</label></p>
+            <p><label class="article_form_lable" for="salesTax">Sales Tax:</label></p>
+            <p><label class="article_form_lable" for="total">Total:</label></p>
+            <!--for button alignment-->
+            <p>&nbsp;</p>
+        </div>
+        <div class="input">
+            <p><input class="article_form_input" type="text" name="subtotal" id="subTotal"></p>
+            <p><input class="article_form_input" type="text" name="taxrate" id="taxRate"></p>
+            <p><input class="article_form_input disabled_input" type="text" class="disable_input" name="salestax"
+                      id="salesTax"
+                      disabled="disabled"></p>
+            <p><input class="article_form_input disabled_input" type="text" class="disable_input" name="total"
+                      id="total"
+                      disabled="disabled"></p>
+            <p>
+                <button id="calculate">Calculate Tax and Total</button>
+                <button id="clear">Clear</button>
+            </p>
+        </div>
+    </section>
+</article>
+<article class="pic-wrap">
+    <img src="images/cat.jpg" alt="cat.jpg" class="pic_content">
+</article>
+<footer class="footer">
+    &copy;2022 XI JIA| xjia11@hawk.iit.edu
+</footer>
+<script>
+    var subtotalElement = document.getElementById("subTotal");
+    var taxrateElement = document.getElementById("taxRate");
+    var salestaxElement = document.getElementById("salesTax");
+    var totalElement = document.getElementById("total");
+    var calculateElement = document.getElementById("calculate");
+    var clearElement = document.getElementById("clear");
+
+    //clear all the fields
+    var clearFunction = function (){
+        subtotalElement.value = "";
+        taxrateElement.value = "";
+        salestaxElement.value = "";
+        totalElement.value = "";
+        subtotalElement.focus();
+    }
+
+    //calculate the sales tax and total value
+    //salestaxValue = subtotalValue * taxrateValue
+    //totalValue = subtotalValue + salestaxValue
+    var calculateFunction = function (){
+        var msg = validate();
+        if(!msg){
+            return;
+        }
+        var subtotalValue = parseFloat(subtotalElement.value);
+        var taxrateValue = parseFloat(taxrateElement.value)/100;
+        var salestaxValue = subtotalValue * taxrateValue;
+        var totalValue = subtotalValue + salestaxValue;
+        salestaxElement.value = salestaxValue;
+        totalElement.value = totalValue;
+    }
+
+    //this function is used to validate the input of the subtotal and the tax rate fileds。
+    //The subtotal value needs to be a valid positive number.
+    //The tax rate value must be a number greater than 0 and less than or equal to 20.
+    function validate(){
+        var msg = "";
+        var status = true;
+        var subtotalValue = parseFloat(subtotalElement.value);
+        var taxrateValue = parseFloat(taxrateElement.value);
+        if(isNaN(subtotalValue)){
+            msg = "The subtotal value need to be a number.\n"
+            status = false;
+        }
+        if(isNaN(taxrateValue)){
+            msg = msg + "The tax rate value need to be a number.\n"
+            status = false;
+        }
+        if(subtotalValue<=0){
+            msg = msg + "The subtotal value needs to be a valid positive number.\n"
+            status = false;
+        }
+        if((taxrateValue<0)&(taxrateValue>20)){
+            msg = msg + "The tax rate value must be a number greater than 0 and less than or equal to 20.\n"
+            status = false;
+        }
+        if(!status){
+            alert(msg);
+        }
+        return status;
+    }
+
+    //this function is used to bind the calculate and the clear function to the buttons.
+    var setupFunction = function (){
+        clearElement.addEventListener("click",clearFunction);
+        calculateElement.addEventListener("click",calculateFunction);
+    }
+
+    // when the page loaded，run the setupFunction funcction
+    document.addEventListener('DOMContentLoaded',setupFunction);
+</script>
+</body>
+</html>
